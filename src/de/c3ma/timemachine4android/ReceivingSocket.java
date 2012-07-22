@@ -7,7 +7,10 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.Scanner;
 
+import de.c3ma.timemachine4android.persitance.LoggerHelper;
+
 import android.app.Service;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
@@ -88,11 +91,14 @@ public class ReceivingSocket extends Thread implements Constants {
             String connectionStatus = "connected!";
             Log.d(TAG, connectionStatus);
             
+            SQLiteDatabase dbLogger = new LoggerHelper(mParentService).getWritableDatabase();
+            
             while (!client.isClosed() && socketIn.hasNext()) {
                 socketData = socketIn.nextLine();
                 if (socketData.startsWith(NET_MSG)) {
                     String msg = socketData.substring(NET_MSG.length());
                     Log.i(TAG, msg);
+                    LoggerHelper.insert(dbLogger, msg);
                 } else if (socketData.startsWith(NET_QUIT)) {
                     send2Client("Bye bye");
                     client.close();
@@ -104,6 +110,8 @@ public class ReceivingSocket extends Thread implements Constants {
                 
                 socketData = "";
             }
+            if (dbLogger != null)
+                dbLogger.close();
         }
     }
     
