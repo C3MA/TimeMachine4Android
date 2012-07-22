@@ -1,5 +1,6 @@
 package de.c3ma.timemachine4android.list;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.content.Context;
@@ -39,30 +40,29 @@ public class MessageListCursorAdapter extends SimpleCursorAdapter {
         View v = inflater.inflate(layout, parent, false);
 
         /* fill here the data */
-        int msgCol = c.getColumnIndex(DBConstants.LOG_DATE);
+        int dateCol = c.getColumnIndex(DBConstants.LOG_DATE);
+        String date = c.getString(dateCol);
+        TextView tvDate = (TextView) v.findViewById(R.id.msg_date);
+        if (tvDate != null) {
+            tvDate.setText(date);
+        }
+        
+        int msgCol = c.getColumnIndex(DBConstants.LOG_MSG);
+        TextView tvMsg = (TextView) v.findViewById(R.id.msg_text);
         String msg = c.getString(msgCol);
-        TextView tv = (TextView) v.findViewById(R.id.msg_date);
-        if (tv != null) {
-            tv.setText(msg);
+        if (tvMsg != null) {
+            tvMsg.setText(msg);
         }
-        int dateCol = c.getColumnIndex(DBConstants.LOG_MSG);
-        Date date = new Date(c.getLong(dateCol));
-        TextView tv2 = (TextView) v.findViewById(R.id.msg_text);
-        if (tv2 != null) {
-            tv2.setText("" + date);
-        }
-        
-        
         return v;
     }
 
     @Override
     public void bindView(View v, Context context, Cursor c) {
         int dateCol = c.getColumnIndex(DBConstants.LOG_DATE);
-        Date date = new Date(c.getLong(dateCol));
+        String date = c.getString(dateCol);
         TextView tvDate = (TextView) v.findViewById(R.id.msg_date);
         if (tvDate != null) {
-            tvDate.setText("" + date);
+            tvDate.setText(date);
         }
         
         int msgCol = c.getColumnIndex(DBConstants.LOG_MSG);
