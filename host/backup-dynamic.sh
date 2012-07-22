@@ -23,6 +23,21 @@ adb forward tcp:1234 tcp:1234
 # start the service on the device
 adb shell "am startservice -n de.c3ma.timemachine4android/de.c3ma.timemachine4android.SocketServer"
 
-sendMsg "Hello World `date`"
+FOLDER=$1/`date +%Y-%m-%d`-light/
+mkdir -p $FOLDER
+echo "----- Target: $FOLDER -----"
+# Essential: People, SMS+MMS, Alarms
+adb pull /data/data/com.android.providers.telephony/databases/mmssms.db $FOLDER
+adb pull /data/data/com.android.providers.telephony/databases/telephony.db $FOLDER
+adb pull /data/data/com.android.providers.contacts/databases/contacts2.db $FOLDER
+adb pull /data/data/com.android.deskclock/databases/alarms.db $FOLDER
+# Mail
+adb pull /data/data/com.fsck.k9/databases/preferences_storage $FOLDER
+adb pull /data/data/com.fsck.k9/shared_prefs/com.fsck.k9_preferences.xml $FOLDER
+# NetCounter
+adb pull /data/data/net.jaqpot.netcounter/databases/network.db $FOLDER
+adb pull /data/data/net.jaqpot.netcounter/shared_prefs/net.jaqpot.netcounter_preferences.xml $FOLDER
+
+sendMsg "Backuped `du -hs $FOLDER` at $HOSTNAME"
 
 echo "quit" | nc localhost 1234
