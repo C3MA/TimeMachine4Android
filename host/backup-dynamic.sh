@@ -14,9 +14,15 @@ if [ $? -ne 0 ]; then
  exit 1
 fi
 
+function sendMsg {
+ echo "msg=$1" | nc localhost 1234 
+}
+
 # create a forwarding of TCP packages
 adb forward tcp:1234 tcp:1234
 # start the service on the device
 adb shell "am startservice -n de.c3ma.timemachine4android/de.c3ma.timemachine4android.SocketServer"
 
-echo "msg=Hello World" | nc localhost 1234
+sendMsg "Hello World `date`"
+
+echo "quit" | nc localhost 1234

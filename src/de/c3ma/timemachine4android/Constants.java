@@ -14,4 +14,6 @@ public interface Constants {
     
     static final String NET_MSG = "msg=";
     static final String NET_FAIL = "FAIL";
+    
+    static final String NET_QUIT = "quit";
 }

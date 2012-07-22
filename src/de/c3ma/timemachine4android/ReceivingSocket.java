@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.Scanner;
 
+import android.app.Service;
 import android.util.Log;
 
 /**
@@ -21,9 +22,15 @@ public class ReceivingSocket extends Thread implements Constants {
     private Scanner socketIn = null;
     private ServerSocket mServer = null;
     private PrintWriter mSocketOut = null;
+    private Service mParentService;
     
-    public ReceivingSocket() {
-        
+    /**
+     * 
+     * @param parentService service, that opens this socket.
+     * (Needed for sending Broadcast)
+     */
+    public ReceivingSocket(final Service parentService) {
+        this.mParentService = parentService;
     }
     
     public void run() {
@@ -42,7 +49,7 @@ public class ReceivingSocket extends Thread implements Constants {
         }
         
         /* as long we have a connection, we will try to send SMS data */
-        while (mServer != null) {
+        while (mServer != null && !mServer.isClosed()) {
             Log.d(TAG, "Wait for a client");
             try {
                 // attempt to accept a connection
@@ -74,18 +81,23 @@ public class ReceivingSocket extends Thread implements Constants {
         } 
     }
 
-    private void receiverData() {
+    private void receiverData() throws IOException {
         if (client != null) {
             String socketData = "";
             // print out success
             String connectionStatus = "connected!";
             Log.d(TAG, connectionStatus);
             
-            while (socketIn.hasNext()) {
+            while (!client.isClosed() && socketIn.hasNext()) {
                 socketData = socketIn.nextLine();
                 if (socketData.startsWith(NET_MSG)) {
                     String msg = socketData.substring(NET_MSG.length());
                     Log.i(TAG, msg);
+                } else if (socketData.startsWith(NET_QUIT)) {
+                    send2Client("Bye bye");
+                    client.close();
+                    mServer.close();
+                    mParentService.stopSelf();
                 } else {
                     send2Client(NET_FAIL);
                 }

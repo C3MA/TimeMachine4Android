@@ -21,7 +21,7 @@ public class SocketServer extends Service implements Constants {
 
     private final SocketBinder mBinder = new SocketBinder();
 
-    private ReceivingSocket mConnection = new ReceivingSocket();
+    private ReceivingSocket mConnection = new ReceivingSocket(this);
     
     /**
      * All functionality, that is accessible by the visible application.
