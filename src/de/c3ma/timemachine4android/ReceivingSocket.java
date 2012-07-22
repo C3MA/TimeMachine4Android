@@ -44,8 +44,9 @@ public class ReceivingSocket extends Thread implements Constants {
         /* as long we have a connection, we will try to send SMS data */
         while (mServer != null) {
             Log.d(TAG, "Wait for a client");
-            
             try {
+                // attempt to accept a connection
+                client = mServer.accept();
                 socketIn = new Scanner(client.getInputStream());
                 mSocketOut = new PrintWriter(client.getOutputStream(), true);
                     receiverData();
