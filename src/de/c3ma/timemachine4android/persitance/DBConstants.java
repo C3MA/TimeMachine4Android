@@ -12,7 +12,7 @@ public interface DBConstants {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "logs";
     
-    public static final String LOG_ID = "id";
+    public static final String LOG_ID = "_id";
     public static final String LOG_DATE = "date";
     public static final String LOG_MSG = "msg";
 }

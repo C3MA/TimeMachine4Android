@@ -54,8 +54,7 @@ public class LoggerHelper extends SQLiteOpenHelper implements DBConstants {
     /**
      * 
      * @param db
-     * @return list of found calendar.
-     * But instead of the URL of the server, the id is inserted in the string (as integer)
+     * @return list of found messages.
      */
     public static LogMsg[] searchAllMessages(SQLiteDatabase db) {
         final String selection = null;
@@ -69,5 +68,13 @@ public class LoggerHelper extends SQLiteOpenHelper implements DBConstants {
             list[i] = new LogMsg(c.getLong(c.getColumnIndex(LOG_DATE)), c.getString(c.getColumnIndex(LOG_MSG)));
         }
         return list;
+    }
+    
+    public static Cursor getCursorAllMessages(SQLiteDatabase db) {
+        final String selection = null;
+        final String[] selectionArgs = null;
+        return db.query(true, TABLE_NAME, new String[] { LOG_DATE, LOG_MSG }, selection, selectionArgs, null, null,
+                null, null);
+        
     }
 }
