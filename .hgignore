@@ -1,0 +1,5 @@
+syntax: regexp
+^bin
+^project.properties$
+^gen
+.DS_Store
