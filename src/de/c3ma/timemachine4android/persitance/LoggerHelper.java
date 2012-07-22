@@ -73,7 +73,7 @@ public class LoggerHelper extends SQLiteOpenHelper implements DBConstants {
     public static Cursor getCursorAllMessages(SQLiteDatabase db) {
         final String selection = null;
         final String[] selectionArgs = null;
-        return db.query(true, TABLE_NAME, new String[] { LOG_DATE, LOG_MSG }, selection, selectionArgs, null, null,
+        return db.query(true, TABLE_NAME, new String[] { LOG_ID, LOG_DATE, LOG_MSG }, selection, selectionArgs, null, null,
                 null, null);
         
     }

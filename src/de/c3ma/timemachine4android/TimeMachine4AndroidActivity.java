@@ -22,12 +22,8 @@ public class TimeMachine4AndroidActivity extends ListActivity implements Constan
         super.onResume();
 
         SQLiteDatabase db = new LoggerHelper(this).getReadableDatabase();
-        Cursor cur = LoggerHelper.getCursorAllMessages(db); 
-        try {
-            setListAdapter(new MessageListCursorAdapter(this, R.layout.message_item, cur));
-        } catch (IllegalArgumentException iae) {
-            Log.d(TAG, "There was a problem creating the list " + iae.getMessage());
-        }
+        Cursor cur = LoggerHelper.getCursorAllMessages(db);
+        setListAdapter(new MessageListCursorAdapter(this, R.layout.message_item, cur));
         db.close();
     }
 }

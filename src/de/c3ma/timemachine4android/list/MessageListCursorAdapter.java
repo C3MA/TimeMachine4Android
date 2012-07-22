@@ -41,13 +41,13 @@ public class MessageListCursorAdapter extends SimpleCursorAdapter {
         /* fill here the data */
         int msgCol = c.getColumnIndex(DBConstants.LOG_DATE);
         String msg = c.getString(msgCol);
-        TextView tv = (TextView) v.findViewById(R.id.msg_text);
+        TextView tv = (TextView) v.findViewById(R.id.msg_date);
         if (tv != null) {
             tv.setText(msg);
         }
         int dateCol = c.getColumnIndex(DBConstants.LOG_MSG);
         Date date = new Date(c.getLong(dateCol));
-        TextView tv2 = (TextView) v.findViewById(R.id.msg_date);
+        TextView tv2 = (TextView) v.findViewById(R.id.msg_text);
         if (tv2 != null) {
             tv2.setText("" + date);
         }
@@ -58,17 +58,18 @@ public class MessageListCursorAdapter extends SimpleCursorAdapter {
 
     @Override
     public void bindView(View v, Context context, Cursor c) {
-        int msgCol = c.getColumnIndex(DBConstants.LOG_DATE);
-        String msg = c.getString(msgCol);
-        TextView tv = (TextView) v.findViewById(R.id.msg_text);
-        if (tv != null) {
-            tv.setText(msg);
-        }
-        int dateCol = c.getColumnIndex(DBConstants.LOG_MSG);
+        int dateCol = c.getColumnIndex(DBConstants.LOG_DATE);
         Date date = new Date(c.getLong(dateCol));
-        TextView tv2 = (TextView) v.findViewById(R.id.msg_date);
-        if (tv2 != null) {
-            tv2.setText("" + date);
+        TextView tvDate = (TextView) v.findViewById(R.id.msg_date);
+        if (tvDate != null) {
+            tvDate.setText("" + date);
+        }
+        
+        int msgCol = c.getColumnIndex(DBConstants.LOG_MSG);
+        TextView tvMsg = (TextView) v.findViewById(R.id.msg_text);
+        String msg = c.getString(msgCol);
+        if (tvMsg != null) {
+            tvMsg.setText(msg);
         }
     }
 }
