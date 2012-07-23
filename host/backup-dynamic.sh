@@ -23,7 +23,18 @@ adb shell "am broadcast -n  de.c3ma.timemachine4android/de.c3ma.timemachine4andr
 # Make the script for generating the information executable
 adb shell "chmod 777 /data/data/de.c3ma.timemachine4android/files/store_msg.sh"
 
-FOLDER=$1/`date +%Y-%m-%d`-light/
+# extract a globalcounter from the homefolder
+if [ -f $HOME/.android-backup-counter ]; then
+counter=`cat $HOME/.android-backup-counter`
+else
+# start with zero (because the value is incremeted automatically)
+counter=0 
+fi
+counter=`expr $counter + 1`
+echo $counter > $HOME/.android-backup-counter
+formatedCounter=$(printf "%.6d" "$counter")
+FOLDER=$1/${formatedCounter}at`date +%Y-%m-%d`-light/
+
 mkdir -p $FOLDER
 echo "----- Target: $FOLDER -----"
 # Essential: People, SMS+MMS, Alarms
