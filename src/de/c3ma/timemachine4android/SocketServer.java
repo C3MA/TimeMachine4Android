@@ -3,10 +3,14 @@ package de.c3ma.timemachine4android;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+
+import de.c3ma.timemachine4android.persitance.LoggerHelper;
 
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -78,6 +82,21 @@ public class SocketServer extends Service implements Constants {
         } catch (Exception e) {
             Log.e(TAG, "Could not extract the script from raw (" + e.getMessage() + ")");
         }
+        
+        /** put the old stuff into the database **/
+        SQLiteDatabase dbLogger = new LoggerHelper(this).getWritableDatabase();
+        
+        try {
+            LoggerHelper.moveInformationFromFile2DB(this, dbLogger, "input.txt");
+        } catch (IOException e) {
+            Log.e(TAG, "Could not read file " + e.getMessage());
+        } catch (ParseException e) {
+            Log.e(TAG, "The date could not be extracted " + e.getMessage());
+        }
+
+        if (dbLogger != null)
+            dbLogger.close();
+        
     }
     
     public void extractIncludedFile(int resourceid, String filename, final Context ctx) throws Exception {

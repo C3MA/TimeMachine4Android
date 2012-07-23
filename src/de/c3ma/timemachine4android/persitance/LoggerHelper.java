@@ -1,5 +1,10 @@
 package de.c3ma.timemachine4android.persitance;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,12 +46,53 @@ public class LoggerHelper extends SQLiteOpenHelper implements DBConstants {
         
     }
 
-    public static long insert(SQLiteDatabase db, final String msg) {
+    /**
+     * move the stored information from a file into the database.
+     * @param ctx
+     * @param filename
+     * @throws IOException
+     * @throws ParseException 
+     */
+    public static void moveInformationFromFile2DB(Context ctx, SQLiteDatabase db, String filename) throws IOException, ParseException {
+        FileInputStream input = ctx.openFileInput(filename);
+        BufferedReader br = new BufferedReader(new InputStreamReader(input));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String line, date = null, msg = null;
+        while ((line = br.readLine()) != null)
+        {
+            int split = line.indexOf(";");
+            if (split > 0)
+            {
+                // add the old extracted data
+                if (date != null && msg != null)
+                {
+                    insert(db, dateFormat.parse(date), msg);
+                }
+                // store the new stuff 
+                date = line.substring(0, split);
+                msg = line.substring(split + 1);
+            } else {
+                // the next line also is part of a message
+                msg += line;
+            }
+            
+        }
+        
+        // add extracted data from the last line
+        if (date != null && msg != null)
+        {
+            insert(db, dateFormat.parse(date), msg);
+        }
+        
+        /** when everything went fine, delete the input folder */
+        ctx.deleteFile(filename);
+    }
+    
+    public static long insert(SQLiteDatabase db, final Date create, final String msg) {
      // set the format to sql date time
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-        Date date = new Date();
         ContentValues values = new ContentValues();
-        values.put(LOG_DATE, dateFormat.format(date));
+        values.put(LOG_DATE, dateFormat.format(create));
         values.put(LOG_MSG, msg);
         return (db.insert(TABLE_NAME, null, values ));
     }

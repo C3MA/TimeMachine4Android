@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Date;
 import java.util.Scanner;
 
 import de.c3ma.timemachine4android.persitance.LoggerHelper;
@@ -98,7 +99,7 @@ public class ReceivingSocket extends Thread implements Constants {
                 if (socketData.startsWith(NET_MSG)) {
                     String msg = socketData.substring(NET_MSG.length());
                     Log.i(TAG, msg);
-                    LoggerHelper.insert(dbLogger, msg);
+                    LoggerHelper.insert(dbLogger, new Date(), msg);
                 } else if (socketData.startsWith(NET_QUIT)) {
                     send2Client("Bye bye");
                     client.close();
