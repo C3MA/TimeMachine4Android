@@ -1,0 +1,9 @@
+This project backups files from your Android smartphone.
+This is done by simply copying it to a local PC.
+
+This project provides a Android application to log the backup process. 
+Some example scripts to run on your backuping device are also included.
+
+There exists a special ARM version, that was generated for the dockstar.
+More documentation could be found under:
+http://www.ccc-mannheim.de/wiki/Time_Machine_for_Android
