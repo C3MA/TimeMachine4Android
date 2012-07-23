@@ -15,13 +15,13 @@ if [ $? -ne 0 ]; then
 fi
 
 function sendMsg {
- echo "msg=$1" | nc localhost 1234 
+ adb shell "sh data/data/de.c3ma.timemachine4android/files/store_msg.sh $@" 
 }
 
-# create a forwarding of TCP packages
-adb forward tcp:1234 tcp:1234
 # start the service on the device
 adb shell "am startservice -n de.c3ma.timemachine4android/de.c3ma.timemachine4android.SocketServer"
+# Make the script for generating the information executable
+adb shell "chmod 777 /data/data/de.c3ma.timemachine4android/files/store_msg.sh"
 
 FOLDER=$1/`date +%Y-%m-%d`-light/
 mkdir -p $FOLDER
@@ -39,5 +39,5 @@ adb pull /data/data/net.jaqpot.netcounter/databases/network.db $FOLDER
 adb pull /data/data/net.jaqpot.netcounter/shared_prefs/net.jaqpot.netcounter_preferences.xml $FOLDER
 
 sendMsg "Backuped `du -hs $FOLDER` at $HOSTNAME"
-
+sendMsg "Space is `df -h | grep disk0`"
 echo "quit" | nc localhost 1234
