@@ -18,8 +18,8 @@ function sendMsg {
  adb shell "sh data/data/de.c3ma.timemachine4android/files/store_msg.sh $@" 
 }
 
-# start the service on the device
-adb shell "am startservice -n de.c3ma.timemachine4android/de.c3ma.timemachine4android.SocketServer"
+# secure, that the binary is executable
+adb shell "am broadcast -n  de.c3ma.timemachine4android/de.c3ma.timemachine4android.UpdateReceiver -a chmod"
 # Make the script for generating the information executable
 adb shell "chmod 777 /data/data/de.c3ma.timemachine4android/files/store_msg.sh"
 
@@ -40,4 +40,6 @@ adb pull /data/data/net.jaqpot.netcounter/shared_prefs/net.jaqpot.netcounter_pre
 
 sendMsg "Backuped `du -hs $FOLDER` at $HOSTNAME"
 sendMsg "Space is `df -h | grep disk0`"
-echo "quit" | nc localhost 1234
+
+# move all information from the textfile to the database
+adb shell "am broadcast -n  de.c3ma.timemachine4android/de.c3ma.timemachine4android.UpdateReceiver -a import"

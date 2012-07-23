@@ -23,7 +23,6 @@ public class UpdateReceiver extends BroadcastReceiver implements Constants {
 
     @Override
     public void onReceive(Context ctx, Intent intent) {
-        Log.v(TAG, "Intent is " + intent);
         if (intent.getAction().toLowerCase().equals("chmod")) {
             actionChmod(ctx);   
         } else if (intent.getAction().toLowerCase().equals("import")) {
