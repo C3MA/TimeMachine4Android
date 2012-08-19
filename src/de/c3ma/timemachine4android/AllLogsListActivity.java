@@ -13,7 +13,7 @@ public class AllLogsListActivity extends ListActivity implements Constants {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.all_logs);
     }
     
     @Override
