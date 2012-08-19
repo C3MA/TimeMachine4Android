@@ -7,7 +7,7 @@ import android.os.Bundle;
 import de.c3ma.timemachine4android.list.MessageListCursorAdapter;
 import de.c3ma.timemachine4android.persitance.LoggerHelper;
 
-public class TimeMachine4AndroidActivity extends ListActivity implements Constants {
+public class AllLogsListActivity extends ListActivity implements Constants {
     
     /** Called when the activity is first created. */
     @Override
