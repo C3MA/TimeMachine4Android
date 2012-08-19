@@ -3,5 +3,5 @@
 
     <string name="app_name">TimeMachine4Android</string>
     <string name="no_messages">There are no messages</string>
-
+	<string name="all_logs">All Logs</string>
 </resources>

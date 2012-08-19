@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -119,8 +120,16 @@ public class LoggerHelper extends SQLiteOpenHelper implements DBConstants {
     public static Cursor getCursorAllMessages(SQLiteDatabase db) {
         final String selection = null;
         final String[] selectionArgs = null;
-        return db.query(true, TABLE_NAME, new String[] { LOG_ID, LOG_DATE, LOG_MSG }, selection, selectionArgs, null, null,
-                null, null);
-        
+        return db.query(true, TABLE_NAME, new String[] { LOG_ID, LOG_DATE, LOG_MSG }, selection, selectionArgs, 
+                null, null, LOG_DATE + " DESC", null);
+    }
+
+    public static Cursor getCursorLastMessages(SQLiteDatabase db) {
+        final String selection = LOG_DATE + " > ?";
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.add(GregorianCalendar.DAY_OF_MONTH, -1);
+        final String[] selectionArgs = { "" + gc.getTimeInMillis() };
+        return db.query(true, TABLE_NAME, new String[] { LOG_ID, LOG_DATE, LOG_MSG }, selection, selectionArgs, 
+                null, null, LOG_DATE + " DESC", null);
     }
 }
