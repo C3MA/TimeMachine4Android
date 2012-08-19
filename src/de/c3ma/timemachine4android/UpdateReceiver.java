@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.Date;
 
 import de.c3ma.timemachine4android.persitance.LoggerHelper;
 import android.content.BroadcastReceiver;
@@ -23,49 +24,26 @@ public class UpdateReceiver extends BroadcastReceiver implements Constants {
 
     @Override
     public void onReceive(Context ctx, Intent intent) {
-        if (intent.getAction().toLowerCase().equals("chmod")) {
-            actionChmod(ctx);   
-        } else if (intent.getAction().toLowerCase().equals("import")) {
-            actionImport(ctx);
+        String msg = intent.getExtras().getString(INTENT_MSG);
+        Log.v(TAG, "Action = " + intent.getAction()  
+                + " msg=" + msg);
+        /* There is a message send from the backuping host, so there must something be exported */
+        if (msg != null && msg.length() > 0) {
+            store(ctx, msg);
         }
     }
 
-    private void actionImport(Context ctx) {
+    private void store(Context ctx, String msg) {
         /** put the old stuff into the database **/
         SQLiteDatabase dbLogger = new LoggerHelper(ctx).getWritableDatabase();
         
-        try {
-            LoggerHelper.moveInformationFromFile2DB(ctx, dbLogger, "input.txt");
-        } catch (IOException e) {
-            Log.e(TAG, "Could not read file " + e.getMessage());
-        } catch (ParseException e) {
-            Log.e(TAG, "The date could not be extracted " + e.getMessage());
+        if (LoggerHelper.insert(dbLogger, new Date(), msg) <= 0)
+        {
+            Log.e(TAG, "The message could not be stored.");
         }
 
         if (dbLogger != null)
             dbLogger.close();
-    }
-
-    private void actionChmod(Context ctx) {
-        try {
-            extractIncludedFile(R.raw.store_msg, "store_msg.sh", ctx);
-        } catch (Exception e) {
-            Log.e(TAG, "Could not extract the script from raw (" + e.getMessage() + ")");
-        }
-    }
-    
-    public void extractIncludedFile(int resourceid, String filename, final Context ctx) throws Exception {
-        InputStream is = ctx.getResources().openRawResource(resourceid);
-        FileOutputStream fos = ctx.openFileOutput(filename, Context.MODE_WORLD_READABLE);
-        byte[] bytebuf = new byte[1024];
-        int read;
-        while ((read = is.read(bytebuf)) >= 0) {
-            fos.write(bytebuf, 0, read);
-        }
-        is.close();
-        fos.getChannel().force(true);
-        fos.flush();
-        fos.close();
     }
 
 }

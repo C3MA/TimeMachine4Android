@@ -9,11 +9,7 @@ package de.c3ma.timemachine4android;
  */
 public interface Constants {
 
-    static final int PORT = 1234;
     static final String TAG = "TimeMachine4Android";
     
-    static final String NET_MSG = "msg=";
-    static final String NET_FAIL = "FAIL";
-    
-    static final String NET_QUIT = "quit";
+    static final String INTENT_MSG = "msg";
 }
