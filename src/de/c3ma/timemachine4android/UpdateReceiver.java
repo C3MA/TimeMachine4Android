@@ -1,17 +1,13 @@
 package de.c3ma.timemachine4android;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
 import java.util.Date;
 
-import de.c3ma.timemachine4android.persitance.LoggerHelper;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import de.c3ma.timemachine4android.persitance.LoggerHelper;
 
 /**
  * created at 23.07.2012 - 22:42:05<br />

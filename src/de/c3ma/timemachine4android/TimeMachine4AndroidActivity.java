@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import de.c3ma.timemachine4android.list.MessageListCursorAdapter;
 import de.c3ma.timemachine4android.persitance.LoggerHelper;
 
